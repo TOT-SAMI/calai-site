@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cal AI Privacy Policy</title>
+  <meta name="description" content="Cal AI privacy policy for launch support and App Store review.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="../">
+        <span class="brand-mark">CA</span>
+        <span class="brand-copy">
+          <strong>Cal AI</strong>
+          <span>Launch support and trust center</span>
+        </span>
+      </a>
+      <nav class="nav-links">
+        <a href="../privacy/">Privacy</a>
+        <a href="../support/">Support</a>
+        <a href="../privacy-choices/">Privacy Choices</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <span class="eyebrow green">Cal AI Privacy</span>
+      <h1>Privacy Policy</h1>
+      <p class="lead">This policy explains what Cal AI collects, how it is used, and what choices are available to users.</p>
+      <p class="muted">Last updated: May 5, 2026</p>
+    </section>
+
+    <section class="section card">
+      <h2>What Cal AI does</h2>
+      <p>Cal AI helps users log food, analyze meal and fridge photos, track nutrition progress, and maintain a wellness profile tied to an account.</p>
+      <div class="note">
+        <strong>Important</strong>
+        <p class="muted">Cal AI is a wellness and nutrition product. It is not medical care, a medical device, or a substitute for professional medical advice.</p>
+      </div>
+    </section>
+
+    <section class="section card">
+      <h2>Information we collect</h2>
+      <ul class="list">
+        <li><strong>Account information:</strong> email address and account identifiers from Supabase Auth.</li>
+        <li><strong>Profile information:</strong> name, age, height, weight, unit preference, goal, diet preference, allergies or intolerances, activity level, skin concern, and reminder preferences that the user chooses to enter.</li>
+        <li><strong>App progress data:</strong> saved meals, nutrition summaries, scan history, reminder setup, and related app state that syncs to the account.</li>
+        <li><strong>Scan inputs:</strong> food and fridge images submitted for analysis, plus structured scan context such as goal or portion hints.</li>
+        <li><strong>Optional meal details:</strong> short food-scan notes such as dish name, ingredients, rough weight, or sauce and oil context.</li>
+        <li><strong>Usage and security data:</strong> request timestamps, approximate request size, status codes, token counts, and limited network metadata such as IP address for abuse prevention and service protection.</li>
+        <li><strong>Barcode lookups:</strong> barcode values scanned or typed when looking up packaged foods.</li>
+      </ul>
+    </section>
+
+    <section class="section card-grid">
+      <article class="card">
+        <h2>How we use information</h2>
+        <ul class="list">
+          <li>To create and maintain accounts.</li>
+          <li>To save and restore profile data and synced app progress across devices.</li>
+          <li>To analyze food and fridge photos and return nutrition-related results.</li>
+          <li>To operate reminders and account settings users choose to enable.</li>
+          <li>To detect abuse, rate-limit requests, measure usage, and control service costs.</li>
+          <li>To troubleshoot issues, support users, and improve the app experience.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>How image processing works</h2>
+        <p>When a live food or fridge scan is run, the image is sent to Cal AI's backend on Supabase so the request can be authenticated, validated, rate-limited, and forwarded to OpenAI for analysis.</p>
+        <p class="muted">The backend stores usage and security metadata about the request. Signed-in body progress photos are backed up to a private Supabase Storage bucket so they can restore on another iPhone.</p>
+      </article>
+    </section>
+
+    <section class="section card">
+      <h2>Third-party services</h2>
+      <div class="feature-grid">
+        <div class="note">
+          <strong>Supabase</strong>
+          <p class="muted">Used for authentication, synced profile data, synced app state, storage, and backend functions.</p>
+        </div>
+        <div class="note">
+          <strong>OpenAI</strong>
+          <p class="muted">Used to analyze food and fridge images that users intentionally submit for AI results.</p>
+        </div>
+        <div class="note">
+          <strong>Open Food Facts</strong>
+          <p class="muted">Used for barcode-based packaged food lookups.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section card">
+      <h2>Data storage and retention</h2>
+      <ul class="list">
+        <li>Account-linked profile data and synced app state are stored with the Cal AI account.</li>
+        <li>Usage and security logs may be retained to monitor abuse, measure service usage, and investigate incidents.</li>
+        <li>Signed-in body progress photos are backed up to private Supabase Storage so they can restore after sign-in on another iPhone.</li>
+      </ul>
+    </section>
+
+    <section class="section card">
+      <h2>Your choices</h2>
+      <ul class="list">
+        <li>Profile details and preferences can be updated in the app.</li>
+        <li><strong>Reset my data</strong> clears synced profile and app-state data for the signed-in account and removes related local data from the current iPhone.</li>
+        <li><strong>Delete account</strong> permanently deletes the Cal AI account, synced data, and local files tied to that account on the current iPhone.</li>
+        <li>Users can contact Cal AI about account deletion, privacy requests, or support follow-up through the public support page or support email below.</li>
+      </ul>
+      <div class="note">
+        <strong>Support and privacy requests</strong>
+        <p class="muted">Email <a href="mailto:originaldake@gmail.com">originaldake@gmail.com</a> or use the <a href="../support/">support page</a>.</p>
+      </div>
+    </section>
+
+    <section class="section card-grid">
+      <article class="card">
+        <h2>Children's privacy</h2>
+        <p>Cal AI is not intended for children under 13, and Cal AI does not knowingly collect personal information from children under 13.</p>
+      </article>
+      <article class="card">
+        <h2>Policy changes</h2>
+        <p>This policy may be updated as the product evolves. When that happens, the effective date on this page will be updated.</p>
+      </article>
+    </section>
+  </div>
+</body>
+</html>
