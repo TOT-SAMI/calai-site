@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Reset your Calby password</title>
+    <style>
+      body {
+        margin: 0;
+        font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #f4f7f5;
+        color: #15201b;
+      }
+      main {
+        max-width: 420px;
+        margin: 40px auto;
+        padding: 24px;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 32px;
+        line-height: 1.05;
+      }
+      p {
+        margin: 0 0 16px;
+        color: #51625c;
+      }
+      label {
+        display: block;
+        margin: 14px 0 6px;
+        font-weight: 600;
+      }
+      input {
+        width: 100%;
+        min-height: 48px;
+        padding: 0 14px;
+        border: 1px solid #d5ddd9;
+        border-radius: 12px;
+        font: inherit;
+        box-sizing: border-box;
+      }
+      button, a.action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 50px;
+        margin-top: 16px;
+        border: 0;
+        border-radius: 999px;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      button {
+        background: #21d39a;
+        color: #fff;
+      }
+      button:disabled {
+        opacity: 0.7;
+      }
+      a.action {
+        background: #eef2f0;
+        color: #15201b;
+      }
+      .notice {
+        padding: 12px 14px;
+        border-radius: 12px;
+        margin: 16px 0;
+      }
+      .info { background: #e8faf3; color: #0d7c58; }
+      .error { background: #fff0f0; color: #b53f3f; }
+      .success { background: #edfdf5; color: #0f7a57; }
+      .hidden { display: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Choose a new password</h1>
+      <p id="intro-copy">Checking your reset link so you can safely recover your Calby account.</p>
+
+      <div id="status" class="notice info">Preparing secure reset session...</div>
+
+      <form id="reset-form" class="hidden">
+        <label for="password">New password</label>
+        <input id="password" type="password" autocomplete="new-password" minlength="8" required />
+
+        <label for="confirm-password">Confirm new password</label>
+        <input id="confirm-password" type="password" autocomplete="new-password" minlength="8" required />
+
+        <button id="submit-button" type="submit">Save new password</button>
+        <a class="action" href="calai://auth/callback">Open Calby on iPhone</a>
+      </form>
+
+      <div id="success-actions" class="hidden">
+        <a class="action" href="calai://auth/callback">Open Calby on iPhone</a>
+      </div>
+    </main>
+
+    <script type="module">
+      import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+      const config = {
+        supabaseURL: "https://gfritrmwkqgwbbigsoof.supabase.co",
+        supabaseAnonKey: "sb_publishable_ReUPkVKcjN0qNAumaIL0Lg_7NmOkUuu",
+      };
+
+      const statusNode = document.getElementById("status");
+      const introCopyNode = document.getElementById("intro-copy");
+      const formNode = document.getElementById("reset-form");
+      const successActionsNode = document.getElementById("success-actions");
+      const submitButton = document.getElementById("submit-button");
+      const passwordNode = document.getElementById("password");
+      const confirmPasswordNode = document.getElementById("confirm-password");
+
+      const supabase = createClient(config.supabaseURL, config.supabaseAnonKey, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+          detectSessionInUrl: false,
+        },
+      });
+
+      function parseRecoveryParams() {
+        const hash = window.location.hash.startsWith("#") ? window.location.hash.slice(1) : "";
+        const source = hash || window.location.search.slice(1);
+        const params = new URLSearchParams(source);
+        return {
+          tokenHash: params.get("token_hash") ?? "",
+          type: params.get("type") ?? "",
+        };
+      }
+
+      function scrubRecoveryTokenFromURL() {
+        if (window.location.hash || window.location.search) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+
+      function setStatus(kind, message) {
+        statusNode.className = "notice " + kind;
+        statusNode.textContent = message;
+      }
+
+      async function prepareRecoverySession() {
+        const recovery = parseRecoveryParams();
+
+        if (!recovery.tokenHash || recovery.type !== "recovery") {
+          setStatus("error", "This reset link is missing recovery details. Please request a new email.");
+          introCopyNode.textContent = "This link cannot be used as-is, so please request a fresh password reset email.";
+          return;
+        }
+
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: recovery.tokenHash,
+          type: "recovery",
+        });
+
+        scrubRecoveryTokenFromURL();
+
+        if (error) {
+          setStatus("error", error.message || "This reset link is invalid or has already been used.");
+          introCopyNode.textContent = "If your email app or security scanner opened the link first, request a new reset email and try again.";
+          return;
+        }
+
+        setStatus("success", "Reset link confirmed. Set your new password below.");
+        introCopyNode.textContent = "Your recovery session is ready. Save a new password below to finish getting back into Calby.";
+        formNode.classList.remove("hidden");
+        passwordNode.focus();
+      }
+
+      formNode.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const password = passwordNode.value.trim();
+        const confirmation = confirmPasswordNode.value.trim();
+
+        if (password.length < 8) {
+          setStatus("error", "Use at least 8 characters for your new password.");
+          return;
+        }
+
+        if (password !== confirmation) {
+          setStatus("error", "Those passwords do not match yet.");
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Saving...";
+
+        const { error } = await supabase.auth.updateUser({ password });
+
+        if (error) {
+          setStatus("error", error.message || "We could not update your password right now.");
+          submitButton.disabled = false;
+          submitButton.textContent = "Save new password";
+          return;
+        }
+
+        await supabase.auth.signOut().catch(() => null);
+        formNode.classList.add("hidden");
+        successActionsNode.classList.remove("hidden");
+        setStatus("success", "Password updated. Return to Calby and sign in with your new password.");
+        introCopyNode.textContent = "Your password is updated. The temporary recovery session has been cleared for safety.";
+      });
+
+      prepareRecoverySession();
+    </script>
+  </body>
+</html>
