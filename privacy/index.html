@@ -37,7 +37,7 @@
         <h2>Коротко</h2>
         <p class="muted">
           Calby хранит данные аккаунта и профиля, может синхронизировать историю и фото прогресса
-          тела и отправляет фото еды или холодильника в backend Calby и OpenAI для ИИ-анализа.
+          тела и отправляет фото еды или холодильника в backend Calby для ИИ-анализа.
         </p>
       </article>
 
@@ -46,7 +46,7 @@
         <h2>Қысқаша</h2>
         <p class="muted">
           Calby аккаунт пен профиль деректерін сақтайды, тарих пен дене прогресі фотоларын
-          синхрондай алады және тағам не тоңазытқыш фотосын Calby backend-іне және OpenAI-ға
+          синхрондай алады және тағам не тоңазытқыш фотосын Calby backend-іне
           AI талдауы үшін жібереді.
         </p>
       </article>
@@ -89,7 +89,7 @@
 
       <article class="card">
         <h2>How image processing works</h2>
-        <p>When a live food or fridge scan is run, the image is sent to Calby's backend on Supabase so the request can be authenticated, validated, rate-limited, and forwarded to OpenAI for analysis.</p>
+        <p>When a live food or fridge scan is run, the image is sent to Calby's backend so the request can be authenticated, validated, rate-limited, and processed for analysis.</p>
         <p class="muted">The backend stores usage and security metadata about the request. Signed-in body progress photos are backed up to a private Supabase Storage bucket so they can restore on another iPhone.</p>
       </article>
     </section>
@@ -102,8 +102,8 @@
           <p class="muted">Used for authentication, synced profile data, synced app state, storage, and backend functions.</p>
         </div>
         <div class="note">
-          <strong>OpenAI</strong>
-          <p class="muted">Used to analyze food and fridge images that users intentionally submit for AI results.</p>
+          <strong>AI processing providers</strong>
+          <p class="muted">Used by Calby's backend to analyze food and fridge images that users intentionally submit for AI results.</p>
         </div>
         <div class="note">
           <strong>Open Food Facts</strong>
